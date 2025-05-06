@@ -1,0 +1,12 @@
+2025-05-06 18:48:49,663 - INFO - Starting data processing workflow
+2025-05-06 18:48:49,663 - INFO - Setting up database connection to PostgreSQL
+2025-05-06 18:48:49,754 - INFO - Connected to PostgreSQL database: woodwine
+2025-05-06 18:48:49,754 - INFO - Generating 10 sample data entries
+2025-05-06 18:48:49,757 - INFO - Sample data generation complete
+2025-05-06 18:48:49,757 - INFO - Starting data processing
+2025-05-06 18:48:49,758 - INFO - Processed 80 entries into statistics
+2025-05-06 18:48:49,758 - INFO - Preparing email notification with log file attachment
+2025-05-06 18:48:49,758 - INFO - Log file process_20250506_184849.log attached to email
+2025-05-06 18:48:49,758 - INFO - Connecting to email server
+2025-05-06 18:48:51,087 - INFO - Email notification with log attachment sent successfully
+2025-05-06 18:48:51,088 - INFO - Data processing workflow completed successfully

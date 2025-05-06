@@ -1,0 +1,11 @@
+2025-05-06 18:03:38,110 - INFO - Starting data processing workflow
+2025-05-06 18:03:38,110 - INFO - Setting up database connection to PostgreSQL
+2025-05-06 18:03:38,191 - INFO - Connected to PostgreSQL database: woodwine
+2025-05-06 18:03:38,191 - INFO - Generating 10 sample data entries
+2025-05-06 18:03:38,195 - INFO - Sample data generation complete
+2025-05-06 18:03:38,195 - INFO - Starting data processing
+2025-05-06 18:03:38,196 - INFO - Processed 20 entries into statistics
+2025-05-06 18:03:38,196 - INFO - Preparing email notification
+2025-05-06 18:03:38,196 - INFO - Connecting to email server
+2025-05-06 18:03:39,890 - ERROR - Failed to send email: (535, b'5.7.8 Username and Password not accepted. For more information, go to\n5.7.8  https://support.google.com/mail/?p=BadCredentials 38308e7fff4ca-3202930698fsm19665111fa.48 - gsmtp')
+2025-05-06 18:03:39,891 - INFO - Data processing workflow completed successfully

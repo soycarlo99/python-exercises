@@ -7,6 +7,9 @@ from email.mime.application import MIMEApplication
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
 import streamlit as st
 from sqlalchemy import Column, DateTime, Float, Integer, String, create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
@@ -199,6 +202,142 @@ def send_email_notification(
         return False
 
 
+# New functions for data visualization
+def plot_average_values(stats):
+    """Create a bar chart of average values for each category"""
+    plt.figure(figsize=(10, 6))
+    names = list(stats.keys())
+    avg_values = [stat["avg"] for stat in stats.values()]
+
+    bars = plt.bar(names, avg_values, color="skyblue")
+
+    # Add value labels on top of bars
+    for bar in bars:
+        height = bar.get_height()
+        plt.text(
+            bar.get_x() + bar.get_width() / 2.0,
+            height + 1,
+            f"{height:.2f}",
+            ha="center",
+            va="bottom",
+        )
+
+    plt.title("Average Values by Category", fontsize=16)
+    plt.xlabel("Category", fontsize=14)
+    plt.ylabel("Average Value", fontsize=14)
+    plt.grid(axis="y", linestyle="--", alpha=0.7)
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+
+    return plt
+
+
+def plot_min_max_range(stats):
+    """Create a line chart showing min, max, and average values"""
+    plt.figure(figsize=(10, 6))
+
+    names = list(stats.keys())
+    x = range(len(names))
+
+    min_values = [stat["min"] for stat in stats.values()]
+    max_values = [stat["max"] for stat in stats.values()]
+    avg_values = [stat["avg"] for stat in stats.values()]
+
+    plt.plot(x, min_values, "bo-", label="Minimum")
+    plt.plot(x, avg_values, "go-", label="Average")
+    plt.plot(x, max_values, "ro-", label="Maximum")
+
+    # Add shaded area between min and max
+    plt.fill_between(x, min_values, max_values, alpha=0.2, color="gray")
+
+    plt.xticks(x, names, rotation=45)
+    plt.title("Value Range by Category", fontsize=16)
+    plt.xlabel("Category", fontsize=14)
+    plt.ylabel("Value", fontsize=14)
+    plt.grid(True, linestyle="--", alpha=0.7)
+    plt.legend()
+    plt.tight_layout()
+
+    return plt
+
+
+def plot_data_distribution(stats):
+    """Create a pie chart showing the distribution of data points"""
+    plt.figure(figsize=(10, 6))
+
+    names = list(stats.keys())
+    counts = [stat["count"] for stat in stats.values()]
+
+    # Explode the largest slice
+    explode = [0] * len(names)
+    max_index = counts.index(max(counts))
+    explode[max_index] = 0.1
+
+    plt.pie(
+        counts,
+        labels=names,
+        explode=explode,
+        autopct="%1.1f%%",
+        shadow=True,
+        startangle=140,
+        colors=plt.cm.Paired.colors,
+    )
+
+    plt.axis("equal")  # Equal aspect ratio ensures the pie chart is circular
+    plt.title("Distribution of Data Points by Category", fontsize=16)
+    plt.tight_layout()
+
+    return plt
+
+
+def plot_radar_chart(stats):
+    """Create a radar chart comparing all metrics"""
+    plt.figure(figsize=(10, 8))
+
+    # Number of variables
+    categories = list(stats.keys())
+    N = len(categories)
+
+    # What will be the angle of each axis in the plot
+    angles = [n / float(N) * 2 * np.pi for n in range(N)]
+    angles += angles[:1]  # Close the loop
+
+    # Normalize data for radar chart (0-1 scale)
+    max_avg = max(stat["avg"] for stat in stats.values())
+    normalized_avgs = [stat["avg"] / max_avg for stat in stats.values()]
+    normalized_avgs += normalized_avgs[:1]  # Close the loop
+
+    # Draw the plot
+    ax = plt.subplot(111, polar=True)
+
+    # Draw one axis per variable and add labels
+    plt.xticks(angles[:-1], categories, size=12)
+
+    # Draw the chart
+    ax.plot(angles, normalized_avgs, "o-", linewidth=2)
+    ax.fill(angles, normalized_avgs, alpha=0.25)
+
+    # Add value annotations
+    for i, angle in enumerate(angles[:-1]):
+        original_value = list(stats.values())[i]["avg"]
+        plt.annotate(
+            f"{original_value:.2f}",
+            xy=(angle, normalized_avgs[i]),
+            xytext=(angle, normalized_avgs[i] + 0.1),
+            ha="center",
+        )
+
+    # Set y-axis to start from center
+    ax.set_rlabel_position(0)
+    plt.yticks([0.25, 0.5, 0.75], ["25%", "50%", "75%"], color="grey", size=10)
+    plt.ylim(0, 1)
+
+    plt.title("Radar Chart of Average Values (Normalized)", size=16)
+    plt.tight_layout()
+
+    return plt
+
+
 # Streamlit app
 def main():
     st.title("📊 SQL Data Processing Workflow")
@@ -208,6 +347,7 @@ def main():
     1. Connects to a PostgreSQL database
     2. Generates and processes sample data
     3. Sends email notifications with results
+    4. Visualizes the processed data
     """
     )
 
@@ -334,34 +474,114 @@ def main():
         ):
             stats = st.session_state.stats
 
-            col1, col2 = st.columns(2)
+            # Create tabs for text data and visualizations
+            tabs = st.tabs(["Text Data", "Visualizations"])
 
-            with col1:
-                st.subheader("Statistics by Category")
-                for name, stat in stats.items():
-                    st.write(f"**{name}**: {stat['avg']:.2f}")
-                    st.write(f"Range: {stat['max'] - stat['min']:.2f}")
-                    st.write(f"Count: {stat['count']}")
-                    st.write("---")
+            # Tab 1: Text Data (existing implementation)
+            with tabs[0]:
+                col1, col2 = st.columns(2)
 
-            with col2:
-                st.subheader("Detailed View")
-                for name, stat in stats.items():
-                    st.write(f"**{name}:**")
-                    metrics_data = {
-                        "Metric": ["Count", "Average", "Minimum", "Maximum"],
-                        "Value": [
-                            stat["count"],
-                            f"{stat['avg']:.2f}",
-                            f"{stat['min']:.2f}",
-                            f"{stat['max']:.2f}",
-                        ],
+                with col1:
+                    st.subheader("Statistics by Category")
+                    for name, stat in stats.items():
+                        st.write(f"**{name}**: {stat['avg']:.2f}")
+                        st.write(f"Range: {stat['max'] - stat['min']:.2f}")
+                        st.write(f"Count: {stat['count']}")
+                        st.write("---")
+
+                with col2:
+                    st.subheader("Detailed View")
+                    for name, stat in stats.items():
+                        st.write(f"**{name}:**")
+                        metrics_data = {
+                            "Metric": ["Count", "Average", "Minimum", "Maximum"],
+                            "Value": [
+                                stat["count"],
+                                f"{stat['avg']:.2f}",
+                                f"{stat['min']:.2f}",
+                                f"{stat['max']:.2f}",
+                            ],
+                        }
+                        for i in range(len(metrics_data["Metric"])):
+                            st.write(
+                                f"{metrics_data['Metric'][i]}: {metrics_data['Value'][i]}"
+                            )
+                        st.write("---")
+
+            # Tab 2: Visualizations
+            with tabs[1]:
+                # Check if we have at least 2 categories for visualizations
+                if len(stats) >= 2:
+                    st.subheader("Data Visualizations")
+
+                    # Create a DataFrame from the stats for easier visualization
+                    viz_data = {
+                        "Category": [],
+                        "Count": [],
+                        "Average": [],
+                        "Min": [],
+                        "Max": [],
+                        "Range": [],
                     }
-                    for i in range(len(metrics_data["Metric"])):
-                        st.write(
-                            f"{metrics_data['Metric'][i]}: {metrics_data['Value'][i]}"
+
+                    for name, stat in stats.items():
+                        viz_data["Category"].append(name)
+                        viz_data["Count"].append(stat["count"])
+                        viz_data["Average"].append(stat["avg"])
+                        viz_data["Min"].append(stat["min"])
+                        viz_data["Max"].append(stat["max"])
+                        viz_data["Range"].append(stat["max"] - stat["min"])
+
+                    # Display the visualization options
+                    st.write("### Choose Visualizations to Display")
+                    col1, col2 = st.columns(2)
+
+                    with col1:
+                        show_bar = st.checkbox("Bar Chart - Average Values", value=True)
+                        show_range = st.checkbox(
+                            "Line Chart - Value Ranges", value=True
                         )
-                    st.write("---")
+
+                    with col2:
+                        show_pie = st.checkbox(
+                            "Pie Chart - Data Distribution", value=True
+                        )
+                        show_radar = st.checkbox("Radar Chart - Comparison", value=True)
+
+                    # Display selected visualizations
+                    if show_bar:
+                        st.write("### Average Values by Category")
+                        fig_bar = plot_average_values(stats)
+                        st.pyplot(fig_bar)
+
+                    if show_range:
+                        st.write("### Min, Max and Average Values")
+                        fig_range = plot_min_max_range(stats)
+                        st.pyplot(fig_range)
+
+                    if show_pie:
+                        st.write("### Distribution of Data Points")
+                        fig_pie = plot_data_distribution(stats)
+                        st.pyplot(fig_pie)
+
+                    if show_radar and len(stats) >= 3:
+                        st.write("### Radar Comparison of Categories")
+                        fig_radar = plot_radar_chart(stats)
+                        st.pyplot(fig_radar)
+                    elif show_radar:
+                        st.info(
+                            "Radar chart requires at least 3 categories to display properly."
+                        )
+
+                    # Add a data table with all statistics
+                    st.write("### Complete Data Table")
+                    df = pd.DataFrame(viz_data)
+                    st.dataframe(df.set_index("Category"))
+
+                else:
+                    st.warning(
+                        "At least 2 data categories are required to generate visualizations. Please process more data."
+                    )
         else:
             st.info("No processing results available. Run the processing first.")
 

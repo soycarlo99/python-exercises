@@ -18,10 +18,11 @@ from email.mime.application import MIMEApplication
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
-# import pandas as pd
-# import psycopg2
 from sqlalchemy import Column, DateTime, Float, Integer, String, create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
+
+# import pandas as pd
+# import psycopg2
 
 # Setup logging
 log_dir = "logs"

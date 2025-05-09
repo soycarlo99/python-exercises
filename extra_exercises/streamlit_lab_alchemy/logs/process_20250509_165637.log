@@ -1,0 +1,28 @@
+2025-05-09 16:56:37,241 - INFO - Application started
+2025-05-09 16:56:54,757 - INFO - Setting up database connection to PostgreSQL
+2025-05-09 16:56:54,887 - INFO - Connected to PostgreSQL database: woodwine
+2025-05-09 16:56:54,888 - INFO - Generating 10 sample data entries
+2025-05-09 16:56:54,892 - INFO - Sample data generation complete
+2025-05-09 16:56:54,892 - INFO - Starting data processing
+2025-05-09 16:56:54,895 - INFO - Processed 150 entries into statistics
+2025-05-09 16:56:54,895 - INFO - Preparing email notification with log file attachment
+2025-05-09 16:56:54,895 - INFO - Using log file path: logs/process_20250509_165637.log
+2025-05-09 16:56:54,896 - INFO - Log file process_20250509_165637.log attached to email
+2025-05-09 16:56:54,896 - INFO - Connecting to email server
+2025-05-09 16:56:56,374 - INFO - Email notification sent successfully
+2025-05-09 16:58:21,791 - INFO - Application started
+2025-05-09 16:58:22,968 - INFO - Application started
+2025-05-09 16:58:24,508 - INFO - Application started
+2025-05-09 17:37:51,793 - INFO - Application started
+2025-05-09 17:42:04,252 - INFO - Setting up database connection to PostgreSQL
+2025-05-09 17:42:04,343 - INFO - Connected to PostgreSQL database: woodwine
+2025-05-09 17:42:04,345 - INFO - Generating 10 sample data entries
+2025-05-09 17:42:04,351 - INFO - Sample data generation complete
+2025-05-09 17:42:04,352 - INFO - Starting data processing
+2025-05-09 17:42:04,356 - INFO - Processed 160 entries into statistics
+2025-05-09 17:42:04,359 - INFO - Preparing email notification with log file attachment
+2025-05-09 17:42:04,359 - INFO - Using log file path: logs/process_20250509_173751.log
+2025-05-09 17:42:04,360 - ERROR - Log file not found at path: logs/process_20250509_173751.log
+2025-05-09 17:42:04,361 - INFO - Connecting to email server
+2025-05-09 17:42:05,497 - INFO - Email notification sent successfully
+2025-05-09 17:42:35,444 - INFO - Application started

@@ -1,0 +1,24 @@
+2025-05-09 16:52:39,311 - INFO - Setting up database connection to PostgreSQL
+2025-05-09 16:52:39,562 - INFO - Connected to PostgreSQL database: woodwine
+2025-05-09 16:52:39,563 - INFO - Generating 10 sample data entries
+2025-05-09 16:52:39,573 - INFO - Sample data generation complete
+2025-05-09 16:52:39,575 - INFO - Starting data processing
+2025-05-09 16:52:39,580 - INFO - Processed 120 entries into statistics
+2025-05-09 16:52:39,581 - INFO - Preparing email notification with log file attachment
+2025-05-09 16:52:39,582 - ERROR - Failed to attach log file: [Errno 2] No such file or directory: 'logs/process_20250509_165239.log'
+2025-05-09 16:54:39,688 - INFO - Setting up database connection to PostgreSQL
+2025-05-09 16:54:39,754 - INFO - Connected to PostgreSQL database: woodwine
+2025-05-09 16:54:39,755 - INFO - Generating 10 sample data entries
+2025-05-09 16:54:39,761 - INFO - Sample data generation complete
+2025-05-09 16:54:39,762 - INFO - Starting data processing
+2025-05-09 16:54:39,765 - INFO - Processed 130 entries into statistics
+2025-05-09 16:54:39,767 - INFO - Preparing email notification with log file attachment
+2025-05-09 16:54:39,767 - ERROR - Failed to attach log file: [Errno 2] No such file or directory: 'logs/process_20250509_165439.log'
+2025-05-09 16:54:46,366 - INFO - Setting up database connection to PostgreSQL
+2025-05-09 16:54:46,404 - INFO - Connected to PostgreSQL database: woodwine
+2025-05-09 16:54:46,406 - INFO - Generating 10 sample data entries
+2025-05-09 16:54:46,412 - INFO - Sample data generation complete
+2025-05-09 16:54:46,413 - INFO - Starting data processing
+2025-05-09 16:54:46,416 - INFO - Processed 140 entries into statistics
+2025-05-09 16:54:46,417 - INFO - Preparing email notification with log file attachment
+2025-05-09 16:54:46,417 - ERROR - Failed to attach log file: [Errno 2] No such file or directory: 'logs/process_20250509_165446.log'
